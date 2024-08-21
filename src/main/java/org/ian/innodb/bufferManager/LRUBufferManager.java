@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -82,10 +81,10 @@ public class LRUBufferManager implements BufferManager {
 			file.readFully(backingStore[freeFrame]);
 
 			Page page = Page.fromBytes(backingStore[freeFrame]);
-			if (Objects.requireNonNull(page).header().getSpaceId() == 0 && page.header().getOffset() == 0)
+			if (Objects.requireNonNull(page).header().spaceId() == 0 && page.header().offset() == 0)
 				throw new IOException("Page not found.");
 
-			if (page.header().getSpaceId() != spaceId || page.header().getOffset() != offset)
+			if (page.header().spaceId() != spaceId || page.header().offset() != offset)
 				throw new IOException("Checksum mismatch.");
 
 			lruList[freeFrame] = currentTime;
@@ -100,7 +99,7 @@ public class LRUBufferManager implements BufferManager {
 
 	@Override
 	public void unpin(Page page) {
-		long pageKey = ((long) page.header().getSpaceId() << 32) | (page.header().getOffset() & 0xFFFFFFFFL);
+		long pageKey = ((long) page.header().spaceId() << 32) | (page.header().offset() & 0xFFFFFFFFL);
 		Integer frameNumber = pagePinMap.get(pageKey);
 
 		if (frameNumber != null) {

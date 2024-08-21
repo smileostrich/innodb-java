@@ -22,7 +22,6 @@ public record LobDataHeader(byte version, int dataLen, long trxId) {
 		return Optional.of(new LobDataHeader(version, dataLen, trxId));
 	}
 
-
 	@Override
 	public String toString() {
 		return "LobDataHeader{" +

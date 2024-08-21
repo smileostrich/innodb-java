@@ -9,9 +9,9 @@ public class RecordHeader {
 	private final byte numRecordsOwned;
 	private final int order;
 	private final RecordType recordType;
-	private final Optional<Integer> nextRecordOffset;
+	private final Integer nextRecordOffset;
 
-	public RecordHeader(InfoFlags infoFlags, byte numRecordsOwned, int order, RecordType recordType, Optional<Integer> nextRecordOffset) {
+	public RecordHeader(InfoFlags infoFlags, byte numRecordsOwned, int order, RecordType recordType, Integer nextRecordOffset) {
 		this.infoFlags = infoFlags;
 		this.numRecordsOwned = numRecordsOwned;
 		this.order = order;
@@ -46,13 +46,13 @@ public class RecordHeader {
 		}
 
 		int nextOffset = buf.getShort(offset - 2);
-		Optional<Integer> nextRecordOffset = nextOffset == 0 ? Optional.empty() : Optional.of(offset + nextOffset);
+		Integer nextRecordOffset = nextOffset == 0 ? null : offset + nextOffset;
 
 		return Optional.of(new RecordHeader(infoFlags.get(), numRecordsOwned, order, recordType.get(), nextRecordOffset));
 	}
 
 	public int getNextRecordOffset() {
-		return nextRecordOffset.orElseThrow(() -> new IllegalStateException("No next record offset available"));
+		return nextRecordOffset;
 	}
 
 	@Override

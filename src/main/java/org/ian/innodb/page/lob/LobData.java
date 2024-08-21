@@ -8,7 +8,7 @@ import java.util.Optional;
 public record LobData(Page page, LobDataHeader header) {
 
 	public static Optional<LobData> tryFromPage(Page page) {
-		if (page.header().getPageType() == PageType.LOB_DATA) {
+		if (page.header().pageType() == PageType.LOB_DATA) {
 			return LobDataHeader.tryFromBytes(page.getBody()).map(header -> new LobData(page, header));
 		} else {
 			return Optional.empty();  // Handle InnoDBError.InvalidPageType appropriately
